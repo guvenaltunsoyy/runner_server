@@ -8,24 +8,69 @@ var DbHelper = function (connectionURL) {
   client.connect();
 
   // burası async çünkü client.query asenkron çalışırken await kullanmamız gerekiyor
-  this.userAuth = async function (mail, password) {
-    var result = await client.query("SELECT * FROM db_runners WHERE mail = $1 AND password = $2", [mail, password])
+  this.userAuth = async function (username, password) {
+    var result = await client.query("SELECT * FROM db_runners WHERE username = $1 AND password = $2", [username, password])
     if (result.rows.length > 0) {
       return true;
     }
     return false;
   }
+  this.getMail = async function () {
+    var result = await client.query("SELECT * FROM email")
+    if (result.rows.length > 0) {
+      return result.rows;
+    }
+  }
+  this.getImage = async function (username) {
+    var result = await client.query("SELECT image FROM db_runners WHERE username=$1", [username])
+    if (result.rows.length > 0) {
+      for (var i = 0; i < result.rows.length; i++) {
+       result.rows[i].image = result.rows[i].image.toString();
+      }
+      return result.rows;
+    } else {
+      return false;
+    }
+  }
+  this.getRunCount = async function (user) {
+    var result = await client.query("SELECT username,runcount,image FROM db_runners WHERE username = $1", [user])
+    if (result.rows.length > 0) {
+      for (var i = 0; i < result.rows.length; i++) {
+        result.rows[i].image = result.rows[i].image.toString();
+       }
+      return result.rows;
+    } else {
+      return false;
+    }
+  }
 
   this.listRunners = async function () {
-    var result = await client.query("SELECT name,runCount FROM db_runners")
+    var result = await client.query("SELECT username,runCount,title,image FROM db_runners WHERE id!=1 ORDER BY runcount DESC")
     if (result.rows.length > 0) {
+      for (var i = 0; i < result.rows.length; i++) {
+        result.rows[i].image = result.rows[i].image.toString();
+       }
       return result.rows;
     } else
       return false;
   }
 
-  this.insertRunner = async function (name, surname, password, mail, image) {
-    await client.query('INSERT INTO db_runners (name,surname,password,mail,image) VALUES ($1,$2,$3,$4,pg_read_file($5)::bytea)', [name, surname, password, mail, image], function (err, result) {
+
+  this.insertRunner = async function (username, name, password, age, phonenumber, runcount, mail, title) {
+    runcount = Math.floor(Math.random() * Math.floor(100));
+    await client.query('INSERT INTO db_runners (username,name, password,age,phonenumber,runcount,mail,title,state,id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)', [username, name, password, age, phonenumber, runcount, mail, title, false,runcount], function (err) {
+      if (err) {
+        console.log(err);
+        return false;
+      } else {
+        console.log('row inserted');
+        return true;
+      }
+    });
+  }
+  this.insertRunnerImageTest = async function (username, name, password, age, phonenumber, mail, runcount, title, imageData, state) {
+    runcount = Math.floor(Math.random() * Math.floor(100));
+    await client.query('INSERT INTO db_runners (username,name, password,age,phonenumber,mail,runcount,title,image,state) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)', [username, name, password, age, phonenumber, mail, runcount, title, imageData, state], function (err) {
       if (err) {
         console.log(err);
         return false;
@@ -36,8 +81,8 @@ var DbHelper = function (connectionURL) {
     });
   }
 
-  this.updateRunner = async function (name, surname, password, age, phoneNumber, id) {
-    await client.query("UPDATE db_runners SET name=$1,surname=$2,password=$3,age=$4,phoneNumber=$5 WHERE id=$6", [name, surname, password, age, phoneNumber, id], function (err, result) {
+  this.updateRunner = async function (username, name, password, age, phonenumber, id) {
+    await client.query("UPDATE db_runners SET username=$1,name=$2,password=$3,age=$4,phonenumber=$5 WHERE id=$6", [username, name, password, age, phonenumber, id], function (err, result) {
       if (err) {
         console.log(err);
         return false;
