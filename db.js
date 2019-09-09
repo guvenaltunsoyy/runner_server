@@ -45,7 +45,7 @@ var DbHelper = function (connectionURL) {
   }
 
   this.listRunners = async function () {
-    var result = await client.query("SELECT username,runCount,title,image FROM db_runners WHERE id!=1 ORDER BY runcount DESC")
+    var result = await client.query("SELECT username,runCount,title,image FROM db_runners WHERE id!=1 ORDER BY runcount DESC LIMIT 10")
     if (result.rows.length > 0) {
       for (var i = 0; i < result.rows.length; i++) {
         result.rows[i].image = result.rows[i].image.toString();

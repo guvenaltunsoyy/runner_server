@@ -6,7 +6,7 @@ app.use(bodyParser.json({limit: "10mb"}));
 app.use(bodyParser.urlencoded({limit: "10mb", extended: true, parameterLimit:10000}));
 
 
-var dbHelper = new db.DbHelper("postgres://fujvbnlrdizjqe:11d038857624008b98395e45a803f713a33abef7bcc19920ee48cd01c1de9db0@ec2-54-247-70-127.eu-west-1.compute.amazonaws.com:5432/daelauc45kbn2a");
+var dbHelper = new db.DbHelper("postgres://lgkxkmshddxzvj:ab3d66ebe3160b43edb312f0387660056e121f4840e5bfd8ee9c6b8289ceca29@ec2-54-75-245-196.eu-west-1.compute.amazonaws.com:5432/dc7r3mthu333un");
 //postgres://ghnswrbvqsipfn:3303edab84a21b73e9c1d885a78d12d464a7e67b83f89b7474fe2a1a11368992@ec2-54-247-85-251.eu-west-1.compute.amazonaws.com:5432/dfhu902s798jjf
 
 app.get('/login', function (req, res) {
