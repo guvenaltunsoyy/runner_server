@@ -86,32 +86,30 @@ var DbHelper = function (connectionURL) {
   }
   this.insertRunnerImageTest = async function (username, name, password, age, phonenumber, mail, runcount, title, imageData, state) {
     runcount = Math.floor(Math.random() * Math.floor(100));
-    const queryResult = await client.query('INSERT INTO db_runners (username,name, password,age,phonenumber,mail,runcount,title,image,state) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)', [username, name, password, age, phonenumber, mail, runcount, title, imageData, state], function (err) {
+    await client.query('INSERT INTO db_runners (username,name, password,age,phonenumber,mail,runcount,title,image,state) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)', [username, name, password, age, phonenumber, mail, runcount, title, imageData, state], function (err) {
       if (err) {
         console.log(err);
-        return false;
-      } else {
-        console.log('row inserted');
-        var runners = new Runner();
-        runners.createUser(username, name, password, age, phonenumber, mail, runcount, title, imageData, state);
-        //result.runner = runners;
-        result.runner.username = runners.username;
-        result.runner.name = runners.name;
-        result.runner.password = runners.password;
-        result.runner.age = runners.age;
-        result.runner.phonenumber = runners.phonenumber;
-        result.runner.mail = runners.mail;
-        result.runner.runcount = runners.runcount;
-        result.runner.title = runners.title; 
-        result.runner.imageData = runners.imageData;
-        result.runner.state = runners.state;
-
-        result.errorCode = '200';
-        console.log('insert result : ' + JSON.stringify(result));
-
-        return result;
+        throw new Error(err);
       }
+      console.log('row inserted');
     });
+    
+    var runners = new Runner();
+    runners.createUser(username, name, password, age, phonenumber, mail, runcount, title, imageData, state);
+    //result.runner = runners;
+    result.runner.username = runners.username;
+    result.runner.name = runners.name;
+    result.runner.password = runners.password;
+    result.runner.age = runners.age;
+    result.runner.phonenumber = runners.phonenumber;
+    result.runner.mail = runners.mail;
+    result.runner.runcount = runners.runcount;
+    result.runner.title = runners.title;
+    result.runner.imageData = runners.imageData;
+    result.runner.state = runners.state;
+
+    result.errorCode = '200';
+    console.log('insert result : ' + JSON.stringify(result));
 
     return result;
   }

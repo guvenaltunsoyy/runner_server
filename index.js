@@ -51,7 +51,7 @@ app.post('/runCount', function (req, res) {
   })
 })
 
-app.post('/create', function (req, res) {  
+app.post('/create', async function (req, res) {  
   console.log("CREATE: " + req.query.username + " " + req.query.password + " " + req.query.mail);
   //name, surname, password,age,phoneNumber,runcount,mail,title
   // if(dbHelper.insertRunner(req.query.username,req.query.name,req.query.password,req.query.age,req.query.phonenumber,req.query.runcount,req.query.mail,req.query.title)){
@@ -59,13 +59,11 @@ app.post('/create', function (req, res) {
   //   res.end(JSON.stringify({ auth : true }, null, 3));
   // }
   //username, name, password, age, phonenumber, mail, runcount, title,imageData,state
-  dbHelper.insertRunnerImageTest(req.query.username, req.query.name, req.query.password, req.query.age, req.query.phonenumber, req.query.mail, req.query.runcount, req.query.title, req.query.imageData, req.query.state).then(result => {
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({ result }, null, 3));
-    console.log(result);
-    
-    
-  })
+  const result = await dbHelper.insertRunnerImageTest(req.query.username, req.query.name, req.query.password, req.query.age, req.query.phonenumber, req.query.mail, req.query.runcount, req.query.title, req.query.imageData, req.query.state);
+  console.log("result => ", result);
+
+  res.setHeader('Content-Type', 'application/json');
+  res.end(JSON.stringify({ result }, null, 3));
 })
 
 app.get('/update', function (req, res) {
