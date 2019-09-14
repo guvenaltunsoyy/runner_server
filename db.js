@@ -8,7 +8,6 @@ result = {
   'runner': {
     'username': null,
     'name': null,
-    'password': null,
     'age': null,
     'phonenumber': null,
     'mail': null,
@@ -84,22 +83,20 @@ var DbHelper = function (connectionURL) {
       }
     });
   }
-  this.insertRunnerImageTest = async function (username, name, password, age, phonenumber, mail, runcount, title, imageData, state) {
-    runcount = Math.floor(Math.random() * Math.floor(100));
-    await client.query('INSERT INTO db_runners (username,name, password,age,phonenumber,mail,runcount,title,image,state) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)', [username, name, password, age, phonenumber, mail, runcount, title, imageData, state], function (err) {
+  this.insertRunnerImageTest = async function (runner) {
+    console.log("RUNNER : \n", runner);
+    await client.query(`INSERT INTO db_runners (username,name, password,age,phonenumber,mail,runcount,title,image,state) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`, [runner.username, runner.name, runner.password, runner.age, runner.phonenumber, runner.mail, runner.runcount, runner.title, runner.imageData, runner.state], function (err) {
       if (err) {
         console.log(err);
         throw new Error(err);
       }
-      console.log('row inserted');
+      console.log('Runner Created.');
     });
-    
     var runners = new Runner();
-    runners.createUser(username, name, password, age, phonenumber, mail, runcount, title, imageData, state);
+    runners.createUser(runner.username, runner.name, runner.age, runner.phonenumber, runner.mail, runner.runcount, runner.title, runner.imageData, runner.state);
     //result.runner = runners;
     result.runner.username = runners.username;
     result.runner.name = runners.name;
-    result.runner.password = runners.password;
     result.runner.age = runners.age;
     result.runner.phonenumber = runners.phonenumber;
     result.runner.mail = runners.mail;
@@ -109,7 +106,6 @@ var DbHelper = function (connectionURL) {
     result.runner.state = runners.state;
 
     result.errorCode = '200';
-    console.log('insert result : ' + JSON.stringify(result));
 
     return result;
   }
@@ -122,6 +118,29 @@ var DbHelper = function (connectionURL) {
       } else {
         console.log("updated.");
         return true;
+      }
+    })
+  }
+
+  this.createEvent = async function (event) {
+    await client.query("INSERT INTO events (event_name, event_type, created_date, event_date, event_limit, event_address) VALUES  ($1,$2,$3,$4,$5,$6)", [event.name, event.type, event.created_date, event.date, event.limit, event.address], function (err, result) {
+      if (err) {
+        console.log(err);
+        return false;
+      } else {
+        console.log("Event Created.");
+        return true;
+      }
+    })
+  }
+  this.addEvent = async function (event) {
+    await client.query("INSERT INTO events_runners (event_id, runner_id, runner_count) VALUES  ($1,$2,$3)", [event.event_id, event.runner_id, event.runner_count], function (err, result) {
+      if (err) {
+        console.log(err);
+        return false;
+      } else {
+        console.log("Event Scheduled.");
+        return result;
       }
     })
   }

@@ -1,7 +1,7 @@
 var express = require('express')
 var db = require('./db')
 var app = express()
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.urlencoded({ limit: "10mb", extended: true, parameterLimit: 10000 }));
 
@@ -52,20 +52,26 @@ app.post('/runCount', function (req, res) {
 })
 
 app.post('/create', async function (req, res) {  
-  console.log("CREATE: " + req.query.username + " " + req.query.password + " " + req.query.mail);
-  //name, surname, password,age,phoneNumber,runcount,mail,title
-  // if(dbHelper.insertRunner(req.query.username,req.query.name,req.query.password,req.query.age,req.query.phonenumber,req.query.runcount,req.query.mail,req.query.title)){
-  //   res.setHeader('Content-Type', 'application/json');
-  //   res.end(JSON.stringify({ auth : true }, null, 3));
-  // }
-  //username, name, password, age, phonenumber, mail, runcount, title,imageData,state
-  const result = await dbHelper.insertRunnerImageTest(req.query.username, req.query.name, req.query.password, req.query.age, req.query.phonenumber, req.query.mail, req.query.runcount, req.query.title, req.query.imageData, req.query.state);
-  console.log("result => ", result);
-
+  const result = await dbHelper.insertRunnerImageTest(req.body.runner);
+  //console.log(req.body);
+  //console.log("result => ", result);
   res.setHeader('Content-Type', 'application/json');
   res.end(JSON.stringify({ result }, null, 3));
 })
 
+app.post('/createEvent', async function(req, res){
+  const result = await dbHelper.createEvent(req.body.event);
+  console.log(req.body);
+  res.setHeader('Content-Type', 'application/json');
+  res.end(JSON.stringify({ result }, null, 3));
+})
+
+app.post('/addEvent', async function(req, res){
+  const result = await dbHelper.addEvent(req.body.event);
+  console.log(req.body);
+  res.setHeader('Content-Type', 'application/json');
+  res.end(JSON.stringify({ result }, null, 3));
+})
 app.get('/update', function (req, res) {
   console.log(req.query);
   if (dbHelper.updateRunner(req.query.username, req.query.name, req.query.password, req.query.age, req.query.phoneNumber, req.query.id)) {
