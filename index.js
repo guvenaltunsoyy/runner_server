@@ -79,5 +79,11 @@ app.get('/update', function (req, res) {
     res.end(JSON.stringify({ auth: true }, null, 3));
   }
 })
+app.post('/getUser', async function(req, res){
+  const result = await dbHelper.getUser(req.body).then(RunnerModel =>{
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ RunnerModel }, null, 3));
+  });
+})
 
 app.listen(8000)

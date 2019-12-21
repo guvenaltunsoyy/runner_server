@@ -144,6 +144,21 @@ var DbHelper = function (connectionURL) {
       }
     })
   }
+  this.getUser = async function(req){
+    var run = new Runner();
+    var results = await client.query('select * from db_runners where username = $1',[req.username])
+    if (results.rows.length > 0) {
+      console.log("User return");
+      run = results.rows[0];
+      run.image = run.image.toString();
+      run.errorCode = 200;
+      return run;      
+    }else{  
+      run.errorCode = 400;
+      console.log('User not found');    
+      return run;
+    }
+  }
 }
 
 module.exports = { DbHelper };
