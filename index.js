@@ -85,5 +85,7 @@ app.post('/getUser', async function(req, res){
     res.end(JSON.stringify({ RunnerModel }, null, 3));
   });
 })
-
-app.listen(8000)
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Our app is running on port ${ PORT }`);
+});
