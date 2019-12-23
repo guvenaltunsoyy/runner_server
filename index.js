@@ -2,7 +2,6 @@ var express = require('express')
 var db = require('./db')
 var app = express()
 var bodyParser = require('body-parser');
-app.use(allowCrossDomain);
 var allowCrossDomain = function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
@@ -16,6 +15,7 @@ var allowCrossDomain = function(req, res, next) {
     next();
   }
 };
+app.use(allowCrossDomain);
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.urlencoded({ limit: "10mb", extended: true, parameterLimit: 10000 }));
 var dbHelper = new db.DbHelper("postgres://lgkxkmshddxzvj:ab3d66ebe3160b43edb312f0387660056e121f4840e5bfd8ee9c6b8289ceca29@ec2-54-75-245-196.eu-west-1.compute.amazonaws.com:5432/dc7r3mthu333un");
