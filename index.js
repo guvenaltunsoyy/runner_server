@@ -78,7 +78,7 @@ app.post('/create', async function (req, res) {
 })
 
 app.post('/createEvent', async function (req, res) {
-  console.log(req.body.event);
+  console.log(JSON.stringify(req.body.event));
   const result = await dbHelper.createEvent(req.body.event);
   res.setHeader('Content-Type', 'application/json');
   res.end(JSON.stringify({ result }, null, 3));
