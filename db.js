@@ -147,7 +147,7 @@ var DbHelper = function (connectionURL) {
   }
   this.getUser = async function (req) {
     var run = new Runner();
-    var results = await client.query('select * from db_runners where username = $1', [req.username])
+    var results = await client.query('select id,username,name,age,phonenumber,mail,runcount,title,image,state from db_runners where username = $1', [req.username])
     if (results.rows.length > 0) {
       console.log("User return");
       run = results.rows[0];
