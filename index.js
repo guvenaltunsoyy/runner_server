@@ -2,11 +2,11 @@ var express = require('express')
 var db = require('./db')
 var app = express()
 var bodyParser = require('body-parser');
-var allowCrossDomain = function(req, res, next) {
+var allowCrossDomain = function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-  
+
   // intercept OPTIONS method
   if ('OPTIONS' == req.method) {
     res.send(200);
@@ -64,22 +64,27 @@ app.post('/runCount', function (req, res) {
   })
 })
 
-app.post('/create', async function (req, res) {  
+app.post('/create', async function (req, res) {
   console.log(req.body.runner);
-  const result = await dbHelper.insertRunnerImageTest(req.body.runner);
-  //console.log("result => ", result);
-  res.setHeader('Content-Type', 'application/json');
-  res.end(JSON.stringify({ result }, null, 3));
+  if (req.body.runner === undefined || req.body.runner === null) {
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ "result": "Runner undefined" }, null, 3));
+  } else {
+    const result = await dbHelper.insertRunnerImageTest(req.body.runner);
+    //console.log("result => ", result);
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ result }, null, 3));
+  }
 })
 
-app.post('/createEvent', async function(req, res){
+app.post('/createEvent', async function (req, res) {
   const result = await dbHelper.createEvent(req.body.event);
   console.log(req.body);
   res.setHeader('Content-Type', 'application/json');
   res.end(JSON.stringify({ result }, null, 3));
 })
 
-app.post('/addEvent', async function(req, res){
+app.post('/addEvent', async function (req, res) {
   const result = await dbHelper.addEvent(req.body.event);
   console.log(req.body);
   res.setHeader('Content-Type', 'application/json');
@@ -92,13 +97,13 @@ app.get('/update', function (req, res) {
     res.end(JSON.stringify({ auth: true }, null, 3));
   }
 })
-app.post('/getUser', async function(req, res){
-  const result = await dbHelper.getUser(req.body).then(RunnerModel =>{
+app.post('/getUser', async function (req, res) {
+  const result = await dbHelper.getUser(req.body).then(RunnerModel => {
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify({ RunnerModel }, null, 3));
   });
 })
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Our app is running on port ${ PORT }`);
+  console.log(`Our app is running on port ${PORT}`);
 });
