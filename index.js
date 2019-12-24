@@ -65,8 +65,8 @@ app.post('/runCount', function (req, res) {
 })
 
 app.post('/create', async function (req, res) {  
+  console.log(req.body.runner);
   const result = await dbHelper.insertRunnerImageTest(req.body.runner);
-  //console.log(req.body);
   //console.log("result => ", result);
   res.setHeader('Content-Type', 'application/json');
   res.end(JSON.stringify({ result }, null, 3));
