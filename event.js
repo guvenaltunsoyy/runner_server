@@ -1,5 +1,5 @@
 class Event {
-    createUser(name, type, created_date, date, limit, address) {
+    createEvent(name, type, created_date, date, limit, address) {
         this.name = name;
         this.type = type;
         this.created_date = created_date;

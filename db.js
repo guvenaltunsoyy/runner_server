@@ -129,9 +129,9 @@ var DbHelper = function (connectionURL) {
         return false;
       } else {
         console.log("Event Created.");
-        return true;
       }
-    })
+    });
+    return true;
   }
   this.addEvent = async function (event) {
     await client.query("INSERT INTO events_runners (event_id, runner_id, runner_count) VALUES  ($1,$2,$3)", [event.event_id, event.runner_id, event.runner_count], function (err, result) {
