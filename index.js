@@ -82,14 +82,14 @@ app.post('/createEvent', async function (req, res) {
   console.log(JSON.stringify(req.body.event));
   const result = await dbHelper.createEvent(req.body.event);
   res.setHeader('Content-Type', 'application/json');
-  res.end(JSON.stringify({ result }, null, 3));
+  res.end(JSON.stringify({ auth : result }, null, 3));
 })
 
 app.post('/addEvent', async function (req, res) {
   const result = await dbHelper.addEvent(req.body.event);
   console.log(req.body);
   res.setHeader('Content-Type', 'application/json');
-  res.end(JSON.stringify({ result }, null, 3));
+  res.end(JSON.stringify({ auth : result }, null, 3));
 })
 app.get('/eventList', function (req, res) {
   dbHelper.eventList().then(result => {

@@ -132,18 +132,23 @@ var DbHelper = function (connectionURL) {
         console.log("Event Created.");
       }
     });
-    return true;
+    if (event != undefined && event.name != undefined && event.type != undefined) {
+      return true;
+    }
+    return false;
   }
   this.addEvent = async function (event) {
-    await client.query("INSERT INTO events_runners (event_id, runner_id, runner_count) VALUES  ($1,$2,$3)", [event.event_id, event.runner_id, event.runner_count], function (err, result) {
+   await client.query("INSERT INTO events_runners (event_id, runner_id, runner_count) VALUES  ($1,$2,$3)", [event.event_id, event.runner_id, event.runner_count], function (err, result) {
       if (err) {
         console.log(err);
-        return false;
       } else {
         console.log("Event Scheduled.");
-        return true;
       }
-    })
+    });
+    if (event.event_id != undefined && event.runner_id != undefined) {
+      return true;
+    }
+    return false;
   }
 
   this.eventList = async function () {
