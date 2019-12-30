@@ -145,6 +145,17 @@ var DbHelper = function (connectionURL) {
       }
     })
   }
+
+  this.eventList = async function () {
+    var result = await client.query("SELECT * FROM events")
+    if (result.rows.length > 0) {
+      result['errorCode'] = 200;
+    } else {
+      result['errorCode'] = 400;
+    }
+    return result.rows;
+  }
+
   this.getUser = async function (req) {
     var run = new Runner();
     var results = await client.query('select id,username,name,age,phonenumber,mail,runcount,title,image,state from db_runners where username = $1', [req.username])

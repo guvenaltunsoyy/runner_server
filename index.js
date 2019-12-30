@@ -91,6 +91,12 @@ app.post('/addEvent', async function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.end(JSON.stringify({ result }, null, 3));
 })
+app.get('/eventList', function (req, res) {
+  dbHelper.eventList().then(result => {
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ result }, null, 3));
+  })
+})
 app.get('/update', function (req, res) {
   console.log(req.query);
   if (dbHelper.updateRunner(req.query.username, req.query.name, req.query.password, req.query.age, req.query.phoneNumber, req.query.id)) {
