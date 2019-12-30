@@ -141,7 +141,7 @@ var DbHelper = function (connectionURL) {
         return false;
       } else {
         console.log("Event Scheduled.");
-        return result;
+        return true;
       }
     })
   }
