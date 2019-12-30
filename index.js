@@ -1,5 +1,6 @@
 var express = require('express')
 var db = require('./db')
+const https = require('https');
 var app = express()
 var bodyParser = require('body-parser');
 var allowCrossDomain = function (req, res, next) {
@@ -103,6 +104,48 @@ app.post('/getUser', async function (req, res) {
     res.end(JSON.stringify({ RunnerModel }, null, 3));
   });
 })
+
+//iot project endpoint started
+app.get("/filled", async function (req, res) {
+  https.get('https://2bw3s8zet7.execute-api.eu-west-1.amazonaws.com/dev/?fillId=5e07c1008173e316bff90356', (resp) => {
+    let data = '';
+    // A chunk of data has been recieved.
+    resp.on('data', (chunk) => {
+      data += chunk;
+    });
+
+    // The whole response has been received. Print out the result.
+    resp.on('end', () => {
+      console.log(JSON.stringify(data));
+      res.end(JSON.stringify(data));
+    });
+
+  }).on("error", (err) => {
+    console.log("Error: " + err.message);
+  });
+})
+
+app.get("/discharge", async function (req, res) {
+  https.get('https://2bw3s8zet7.execute-api.eu-west-1.amazonaws.com/dev/?dischargeId=5e07c1008173e316bff90356', (resp) => {
+    let data = '';
+    // A chunk of data has been recieved.
+    resp.on('data', (chunk) => {
+      data += chunk;
+    });
+
+    // The whole response has been received. Print out the result.
+    resp.on('end', () => {
+      console.log(JSON.stringify(data));
+      res.end(JSON.stringify(data));
+    });
+
+  }).on("error", (err) => {
+    console.log("Error: " + err.message);
+  });
+})
+//iot project endpoint finished
+
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Our app is running on port ${PORT}`);
