@@ -133,8 +133,13 @@ var DbHelper = function (connectionURL) {
       }
     });
     if (event != undefined && event.name != undefined && event.type != undefined) {
+      console.log({ "auth": true });
+
       return true;
     }
+    console.log({
+      "auth": false
+    });
     return false;
   }
   this.addEvent = async function (event) {
