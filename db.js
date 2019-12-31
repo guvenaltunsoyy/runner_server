@@ -138,7 +138,7 @@ var DbHelper = function (connectionURL) {
     return false;
   }
   this.addEvent = async function (event) {
-   await client.query("INSERT INTO events_runners (event_id, runner_id, runner_count) VALUES  ($1,$2,$3)", [event.event_id, event.runner_id, event.runner_count], function (err, result) {
+    await client.query("INSERT INTO events_runners (event_id, runner_id, runner_count) VALUES  ($1,$2,$3)", [event.event_id, event.runner_id, event.runner_count], function (err, result) {
       if (err) {
         console.log(err);
       } else {
@@ -146,8 +146,12 @@ var DbHelper = function (connectionURL) {
       }
     });
     if (event.event_id != undefined && event.runner_id != undefined) {
+      console.log({ "auth": true });
       return true;
     }
+    console.log({
+      "auth": false
+    });
     return false;
   }
 
