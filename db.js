@@ -143,11 +143,18 @@ var DbHelper = function (connectionURL) {
     return false;
   }
   this.addEvent = async function (event) {
-    await client.query("INSERT INTO events_runners (event_id, runner_id, runner_count) VALUES  ($1,$2,$3)", [event.event_id, event.runner_id, event.runner_count], function (err, result) {
+    await client.query("INSERT INTO events_runners (event_id, runner_id, runner_count) VALUES  ($1,$2,$3)", [event.event_id, event.runner_id, event.runner_count], async function (err, result) {
       if (err) {
         console.log(err);
       } else {
         console.log("Event Scheduled.");
+        await client.query("UPDATE events SET runner_count=$1 WHERE event_id=$2", [event.runner_count, event.event_id], function (err, result) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log("Event runner_count : ", event.runner_count);
+          }
+        });
       }
     });
     if (event.event_id != undefined && event.runner_id != undefined) {
