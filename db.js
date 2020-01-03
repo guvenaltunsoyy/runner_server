@@ -142,7 +142,7 @@ var DbHelper = function (connectionURL) {
     });
     return false;
   }
-  async function runnerCounter (runner_id) {
+  async function runnerCounter(runner_id) {
     var run = new Runner();
     var results = await client.query('select * from db_runners where id = $1', [runner_id])
     if (results.rows.length > 0) {
@@ -150,10 +150,10 @@ var DbHelper = function (connectionURL) {
       run = results.rows[0];
       console.log("runnerCount : ", run.runcount);
       run.runcount++;
-      await client.query('update db_runners set runcount=$1 where id=$2',[run.runcount, runner_id], function(err,res){
+      await client.query('update db_runners set runcount=$1 where id=$2', [run.runcount, runner_id], function (err, res) {
         if (err) {
           console.log("ERROR :", err);
-        }else{
+        } else {
           console.log("runner_count updated :", run.runcount);
         }
       });
@@ -213,6 +213,20 @@ var DbHelper = function (connectionURL) {
       run.errorCode = 400;
       console.log('User not found');
       return run;
+    }
+  }
+
+  this.eventSearch = async function (searhText) {
+    console.log("search text :", searhText);
+    var results = await client.query("select * from events where event_name LIKE '%"+searhText+"%'");
+    if (results.rows.length > 0) {
+      console.log("Events returned.");
+      results['errorCode'] = 200;
+      return results.rows;
+    } else {
+      results =[];
+      console.log('events not found.');
+      return results;
     }
   }
 }

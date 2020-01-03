@@ -118,6 +118,16 @@ app.get('/runnerCounter', function (req, res) {
     res.end(JSON.stringify({ auth: true }, null, 3));
   }
 })
+
+app.get('/searchEvent', function (req, res) {
+  console.log(req.query);
+  dbHelper.eventSearch(req.query.name).then(result => {
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ result }, null, 3));
+  });
+})
+
+
 //iot project endpoint started
 app.get("/filled", async function (req, res) {
   https.get('https://2bw3s8zet7.execute-api.eu-west-1.amazonaws.com/dev/?fillId=5e07c1008173e316bff90356', (resp) => {
