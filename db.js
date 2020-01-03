@@ -142,13 +142,35 @@ var DbHelper = function (connectionURL) {
     });
     return false;
   }
+  async function runnerCounter (runner_id) {
+    var run = new Runner();
+    var results = await client.query('select * from db_runners where id = $1', [runner_id])
+    if (results.rows.length > 0) {
+      console.log("User return");
+      run = results.rows[0];
+      console.log("runnerCount : ", run.runcount);
+      run.runcount++;
+      await client.query('update db_runners set runcount=$1 where id=$2',[run.runcount, runner_id], function(err,res){
+        if (err) {
+          console.log("ERROR :", err);
+        }else{
+          console.log("runner_count updated :", run.runcount);
+        }
+      });
+      run.errorCode = 200;
+    } else {
+      run.errorCode = 400;
+      console.log('User not found');
+      return run;
+    }
+  }
   this.addEvent = async function (event) {
     await client.query("INSERT INTO events_runners (event_id, runner_id, runner_count) VALUES  ($1,$2,$3)", [event.event_id, event.runner_id, event.runner_count], async function (err, result) {
       if (err) {
         console.log(err);
       } else {
         console.log("Event Scheduled.");
-        await client.query("UPDATE events SET runner_count=$1 WHERE event_id=$2", [event.runner_count, event.event_id], function (err, result) {
+        await client.query("UPDATE events SET runner_count=$1 WHERE event_id=$2", [event.runner_count, event.event_id], async function (err, result) {
           if (err) {
             console.log(err);
           } else {
@@ -158,6 +180,7 @@ var DbHelper = function (connectionURL) {
       }
     });
     if (event.event_id != undefined && event.runner_id != undefined) {
+      await runnerCounter(event.runner_id);
       console.log({ "auth": true });
       return true;
     }
