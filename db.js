@@ -42,7 +42,7 @@ var DbHelper = function (connectionURL) {
       for (var i = 0; i < result.rows.length; i++) {
         result.rows[i].image = result.rows[i].image.toString();
       }
-      return result.rows;
+      return result.rows[0];
     } else {
       return false;
     }

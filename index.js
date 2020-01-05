@@ -127,6 +127,15 @@ app.get('/searchEvent', function (req, res) {
   });
 })
 
+app.post('/image', function (req, res) {
+    console.log(req.body);
+    dbHelper.getImage("guven").then(result => {
+      var image = result.image;
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ image }, null, 3));
+    })
+})
+
 
 //iot project endpoint started
 app.get("/filled", async function (req, res) {
