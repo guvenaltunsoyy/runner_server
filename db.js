@@ -121,6 +121,11 @@ var DbHelper = function (connectionURL) {
       }
     })
   }
+  this.updateImage = async function (image, username) {
+    var res = client.query("UPDATE db_runners SET image=$1 WHERE username=$2", [image, username]);
+    var s = res.then(ss =>  ss.rowCount );
+    return s;
+  }
 
   this.createEvent = async function (event) {
     console.log(JSON.stringify(event));
@@ -218,13 +223,13 @@ var DbHelper = function (connectionURL) {
 
   this.eventSearch = async function (searhText) {
     console.log("search text :", searhText);
-    var results = await client.query("select * from events where event_name LIKE '%"+searhText+"%'");
+    var results = await client.query("select * from events where event_name LIKE '%" + searhText + "%'");
     if (results.rows.length > 0) {
       console.log("Events returned.");
       results['errorCode'] = 200;
       return results.rows;
     } else {
-      results =[];
+      results = [];
       console.log('events not found.');
       return results;
     }

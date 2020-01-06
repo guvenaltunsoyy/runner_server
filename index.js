@@ -82,14 +82,14 @@ app.post('/createEvent', async function (req, res) {
   console.log(JSON.stringify(req.body.event));
   const result = await dbHelper.createEvent(req.body.event);
   res.setHeader('Content-Type', 'application/json');
-  res.end(JSON.stringify({ auth : result }, null, 3));
+  res.end(JSON.stringify({ auth: result }, null, 3));
 })
 
 app.post('/addEvent', async function (req, res) {
   const result = await dbHelper.addEvent(req.body.event);
   console.log(req.body);
   res.setHeader('Content-Type', 'application/json');
-  res.end(JSON.stringify({ auth : result }, null, 3));
+  res.end(JSON.stringify({ auth: result }, null, 3));
 })
 app.get('/eventList', function (req, res) {
   dbHelper.eventList().then(result => {
@@ -127,13 +127,12 @@ app.get('/searchEvent', function (req, res) {
   });
 })
 
-app.post('/image', function (req, res) {
-    console.log(req.body);
-    dbHelper.getImage("guven").then(result => {
-      var image = result.image;
-      res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({ image }, null, 3));
-    })
+app.post('/image', async function (req, res) {
+  dbHelper.updateImage(req.body.image, req.body.username).then(result => {
+    console.log(JSON.stringify({ result }));
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ result }, null, 3));
+  })
 })
 
 
