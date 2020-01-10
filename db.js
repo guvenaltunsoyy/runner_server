@@ -137,7 +137,7 @@ var DbHelper = function (connectionURL) {
         console.log("Event Created.");
       }
     });
-    if (event != undefined && event.name != undefined && event.type != undefined) {
+    if (event != undefined && event.event_name != undefined && event.type != undefined) {
       console.log({ "auth": true });
 
       return true;
