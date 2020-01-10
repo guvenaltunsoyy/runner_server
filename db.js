@@ -211,7 +211,7 @@ var DbHelper = function (connectionURL) {
     if (results.rows.length > 0) {
       console.log("User return");
       run = results.rows[0];
-      run.image = run.image.toString();
+      run.image = run.image? run.image.toString() : "";
       run.errorCode = 200;
       return run;
     } else {
