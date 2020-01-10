@@ -129,7 +129,7 @@ var DbHelper = function (connectionURL) {
 
   this.createEvent = async function (event) {
     console.log(JSON.stringify(event));
-    await client.query("INSERT INTO events (event_name, event_type, created_date, event_date, event_limit, event_address) VALUES  ($1,$2,$3,$4,$5,$6)", [event.name, event.type, event.created_date, event.date, event.limit, event.address], function (err, result) {
+    await client.query("INSERT INTO events (event_name, event_type, created_date, event_date, event_limit, event_address) VALUES  ($1,$2,$3,$4,$5,$6)", [event.event_name, event.type, event.created_date, event.date, event.event_limit, event.address], function (err, result) {
       if (err) {
         console.log(err);
         return false;
