@@ -135,6 +135,12 @@ app.post('/image', async function (req, res) {
   })
 })
 
+app.post('/urls', async function (req, res) {
+console.log(req.body);
+
+})
+
+
 
 //iot project endpoint started
 app.get("/filled", async function (req, res) {
